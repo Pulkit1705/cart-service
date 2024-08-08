@@ -6,10 +6,7 @@ service CartService {
     entity Cart : cuid,managed {
         user  : Association to one user;
         cartItems : Composition of many CartItems on cartItems.cart = $self;
-        createdDate : DateTime;
-        modifiedDate : DateTime;
         paymentMode : Association to one PaymentMode;
-        promo : String;
         billingAddress : String;
         shippingAddress :  String;
         deliveryMode : Association to one DeliveryMode;
@@ -30,22 +27,29 @@ service CartService {
 
     }
 
-    entity CartItems : cuid {
+    entity CartItems : cuid, managed {
        cart : Association to one Cart; 
        product : Association to one Product;
        quantity : Integer;
+       discount: Decimal default 0.0;
        itemPrice : Decimal;
        itemTax : Decimal default 0.0 ;
        subtotal : Decimal;
        total : Decimal;
+       sequence : Integer;
     }
 
     entity user : cuid,managed {
         cart : Composition of one Cart;
+        firstName: String;
+        middleName: String;
+        lastName: String;
     }
 
     entity Product: cuid,managed {
-    
+    name : String;
+    description : String;
+
     }
 
 }
